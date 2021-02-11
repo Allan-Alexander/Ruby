@@ -23,3 +23,20 @@ p a
 # Enclose multiword symbols in double quotes
 c = :"multiple words"
 p c
+
+#Synthesize
+puts "\n\n\n"
+books =  ["Design of Arts","Anathem","Shogun"]
+authors = ["Bruno Munari","Neal Stephenson","James Clavell"]
+
+newAuthors = []
+authors.each do |x|
+  newAuthors.push(x.split[0])
+end
+
+for myauthors in newAuthors
+  for book in books
+    puts ":#{myauthors.to_sym.downcase} => #{book}"
+  break
+  end
+end
