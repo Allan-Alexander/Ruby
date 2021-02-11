@@ -1,3 +1,8 @@
+
+# Symbols in ruby
+# given a todo list question
+
+
 Array({:a => "a", :b => "b"})
 
 # => [[:a, "a"],[:b, "b"]]
