@@ -79,6 +79,46 @@ p "#{new_nums}"
 names = [["Jhumpa","Lahiri"],["J.K","Rowling"],["Devdutt","Patel"]]
 fullName = []
 names.each do |(x,y)|
+  p "firstName: #{x}  LastName: #{y}"
   fullName.push(x+" "+y)
 end
 p fullName
+
+# Authors and Books
+puts "\n\n"
+books = ["Design as Art","Anathem","Shogun"]
+authors = ["Bruno Munari","Neal Stephson","James Clavell"]
+
+for book in books
+  for author in authors
+    puts "#{book} was written by #{author}"
+    authors.shift
+    break
+  break
+  end
+end
+
+# Todo category
+puts "\n\n"
+todos = [
+  ["Send invoice","money"],
+  ["Clean room","organize"],
+  ["Pay rent","money"],
+  ["Arrange books","organize"],
+  ["Pay taxes","money"],
+  ["Buy grocerie","food"]
+]
+
+index = 0
+newArr =  todos.sort_by {|a,b|b}
+
+lastElement  = ""
+newArr.each do |(x,y)|
+  if y == lastElement
+    puts " #{x}"
+  else
+    puts "#{y}:"
+    puts " #{x}"
+    lastElement = y
+  end
+end
