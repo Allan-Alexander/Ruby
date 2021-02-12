@@ -51,7 +51,7 @@ def resolve(records, lookup_chain, domain)
     if keyHash.has_key? domain.to_sym
       lookup_chain.push(keyHash[domain.to_sym][0])
       flag = 1
-      p lookup_chain
+      # p lookup_chain
       break
     end
   end
@@ -66,11 +66,13 @@ def resolve(records, lookup_chain, domain)
         # p lookup_chain
         resolve(records, lookup_chain, keyHash[domain.to_sym][0])
       else
-      flag = 1
-      resolve(records, lookup_chain, keyHash[domain.to_sym][0])
-      break
+        flag = 1
+        resolve(records, lookup_chain, keyHash[domain.to_sym][0])
+        break
       end
     end
+    # puts "this is final :#{lookup_chain}"
+    return lookup_chain
   else
     return lookup_chain
   end
