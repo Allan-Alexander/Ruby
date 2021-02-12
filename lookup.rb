@@ -51,28 +51,29 @@ def resolve(records, lookup_chain, domain)
     if keyHash.has_key? domain.to_sym
       lookup_chain.push(keyHash[domain.to_sym][0])
       flag = 1
-      return lookup_chain
+      p lookup_chain
       break
     end
   end
 
 
   if flag == 0
-  for keyHash in records[:CNAME]
-    if keyHash.has_key? domain.to_sym
-      # p keyHash.has_key? domain.to_sym
-      # p keyHash[domain.to_sym][0]
-      lookup_chain.push(keyHash[domain.to_sym][0])
-      # p lookup_chain
-      resolve(records, lookup_chain, keyHash[domain.to_sym][0])
-
-    else
+    for keyHash in records[:CNAME]
+      if keyHash.has_key? domain.to_sym
+        # p keyHash.has_key? domain.to_sym
+        # p keyHash[domain.to_sym][0]
+        lookup_chain.push(keyHash[domain.to_sym][0])
+        # p lookup_chain
+        resolve(records, lookup_chain, keyHash[domain.to_sym][0])
+      else
       flag = 1
       resolve(records, lookup_chain, keyHash[domain.to_sym][0])
       break
+      end
     end
-   end
- end
+  else
+    return lookup_chain
+  end
 end
 
 
