@@ -31,7 +31,7 @@ def parse_dns(nodeList)
 
     nodeArr.each do |(type,domain,source)|
       if type == "CNAME"
-        cname[source.strip.to_sym].push(domain.strip)
+        cname[domain.strip.to_sym].push(source.strip)
       elsif type == "A"
         address[domain.strip.to_sym].push(source.strip)
       end
@@ -46,27 +46,33 @@ end
 
 
 def resolve(records, lookup_chain, domain)
-
-  domain = domain.to_s
-  for keyHash in records[:CNAME]
-
-    if keyHash.has_key? domain.to_sym
-      # p keyHash[domain.to_sym][0]
-      lookup_chain.push(keyHash[domain.to_sym][0])
-    else
-      break
-    end
-    resolve(records, lookup_chain, keyHash[domain.to_sym][0])
-  end
-
+  flag = 0
   for keyHash in records[:ADDRESS]
     if keyHash.has_key? domain.to_sym
-      lookup_chain.push(keyHash[domain.to_s])
+      lookup_chain.push(keyHash[domain.to_sym][0])
+      flag = 1
       return lookup_chain
       break
     end
   end
- p lookup_chain
+
+
+  if flag == 0
+  for keyHash in records[:CNAME]
+    if keyHash.has_key? domain.to_sym
+      # p keyHash.has_key? domain.to_sym
+      # p keyHash[domain.to_sym][0]
+      lookup_chain.push(keyHash[domain.to_sym][0])
+      # p lookup_chain
+      resolve(records, lookup_chain, keyHash[domain.to_sym][0])
+
+    else
+      flag = 1
+      resolve(records, lookup_chain, keyHash[domain.to_sym][0])
+      break
+    end
+   end
+ end
 end
 
 
@@ -74,4 +80,4 @@ end
 dns_records  = parse_dns(dns_raw)
 lookup_chain = [domain]
 lookup_chain = resolve(dns_records, lookup_chain, domain)
-#puts lookup_chain.join(" => ")
+puts lookup_chain.join(" => ")
