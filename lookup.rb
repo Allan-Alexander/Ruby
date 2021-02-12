@@ -1,4 +1,12 @@
+=begin
 
+  Allan Alexander
+  9:00 am
+  Friday 12th February 2021
+
+  Topic: Assignment DNS
+
+=end
 
 
 # Function to check whether the domain name was entered in CMD
@@ -34,7 +42,7 @@ def parse_dns(nodeList)
     end
     nodeArr.push(node.strip.split(','))
   end
-    # Creating the key value Hash
+  # Creating the key value Hash
   nodeArr.each do |(type,domain,source)|
     if type == "CNAME"
       cname[domain.strip.to_sym].push(source.strip)
@@ -45,9 +53,6 @@ def parse_dns(nodeList)
   # Adding CNAME hash and ADDRESS hash into domain hash
   domain[:CNAME].push(cname)
   domain[:ADDRESS].push(address)
-  #p cname
-  #puts "\n"
-  #p address
   return domain
 end
 
@@ -55,6 +60,7 @@ end
 def resolve(records, lookup_chain, domain)
   # check if key exists
   count = 0
+
   for keyHash in records[:ADDRESS]
     if keyHash.has_key? domain.to_sym
       count=1
@@ -67,10 +73,10 @@ def resolve(records, lookup_chain, domain)
     end
   end
 
-   if count == 0
+  if count == 0
     puts "Error: record not found for #{domain}"
     exit
-   end
+  end
 
   # flag to exit when it enters ADDRESS key
   flag = 0
@@ -78,7 +84,6 @@ def resolve(records, lookup_chain, domain)
   # Access the Keys in ADDRESS key from records
   for keyHash in records[:ADDRESS]
     if keyHash.has_key? domain.to_sym
-      # p keyHash.has_key? domain.to_sym
       lookup_chain.push(keyHash[domain.to_sym][0])
       flag = 1
       break
@@ -87,12 +92,10 @@ def resolve(records, lookup_chain, domain)
 
 
   if flag == 0
+
     for keyHash in records[:CNAME]
       if keyHash.has_key? domain.to_sym
-        # p keyHash.has_key? domain.to_sym
-        # p keyHash[domain.to_sym][0]
         lookup_chain.push(keyHash[domain.to_sym][0])
-        # p lookup_chain
         resolve(records, lookup_chain, keyHash[domain.to_sym][0])
       else
         flag = 1
@@ -101,7 +104,6 @@ def resolve(records, lookup_chain, domain)
         break
       end
     end
-    # puts "this is final :#{lookup_chain}"
     if lookup_chain.length == 1
       puts "Error: record not found for #{lookup_chain}"
     else
